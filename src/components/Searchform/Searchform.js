@@ -20,15 +20,13 @@ export default class Searchform extends Component {
   render() {
     const { name } = this.state;
     return (
-      <form className={s.SearchForm} onSubmit={this.handleSubmit}>
-        <button type="submit" className={s.SearchFormButton}>
-          <span className={s.SearchFormbuttonlabel}>
-            <FaSearch />
-          </span>
+      <form className={s.Form} onSubmit={this.handleSubmit}>
+        <button type="submit" className={s.Form__Button}>
+          <FaSearch size="2em" fill="#ccc" className={s.Button__icon} />
         </button>
 
         <input
-          className={s.SearchFormInput}
+          className={s.Form__Input}
           onChange={this.onChengeValue}
           value={name}
           type="text"

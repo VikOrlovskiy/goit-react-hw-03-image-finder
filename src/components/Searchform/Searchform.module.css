@@ -1,4 +1,4 @@
-.SearchForm {
+.Form {
   display: flex;
   align-items: center;
   width: 100%;
@@ -9,36 +9,22 @@
   margin: 0 auto;
 }
 
-.SearchFormButton {
-  display: inline-block;
+.Form__Button {
   width: 48px;
   height: 48px;
   border: 0;
-  background-size: 40%;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.6;
-  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   outline: none;
+  background-color: transparent;
 }
-.SearchFormButton:hover {
-  opacity: 1;
+.Button__icon {
+  fill: #ccc;
+  transition: fill 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-
-.SearchFormbuttonlabel {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  clip-path: inset(50%);
-  border: 0;
+.Form__Button:hover .Button__icon {
+  fill: black;
 }
-
-.SearchFormInput {
+.Form__Input {
   display: inline-block;
   width: 100%;
   font: inherit;
@@ -49,7 +35,7 @@
   padding-right: 4px;
 }
 
-.SearchFormInput::placeholder {
+.Form__Input::placeholder {
   font: inherit;
   font-size: 18px;
 }
