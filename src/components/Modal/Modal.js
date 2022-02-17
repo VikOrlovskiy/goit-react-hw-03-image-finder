@@ -6,13 +6,9 @@ export default class Modal extends Component {
   componentDidMount() {
     window.addEventListener("keydown", this.onKeydovnCloseModal);
   }
-  componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate");
-  }
   componentWillUnmount() {
     window.removeEventListener("keydown", this.onKeydovnCloseModal);
   }
-
   onKeydovnCloseModal = (e) => {
     if (e.code === "Escape") {
       this.props.onClose();
