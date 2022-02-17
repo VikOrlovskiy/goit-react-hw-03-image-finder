@@ -29,7 +29,11 @@ export default class Modal extends Component {
         className={s.Modal__backdrop}
         onClick={this.onBackdropClickCloseModal}
       >
-        <div className={s.Modal__content}>{this.props.children}</div>;
+        <img
+          className={s.Modal__content}
+          src={this.props.src}
+          alt="asfdsfdsf"
+        />
       </div>,
       modalRoot
     );

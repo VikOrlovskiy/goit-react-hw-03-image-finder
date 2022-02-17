@@ -12,16 +12,17 @@ export default class Searchform extends Component {
     const { name } = this.state;
     evt.preventDefault();
     this.props.onSubmit(name);
-    this.resetForm();
   };
-  resetForm() {
-    this.setState({ name: "" });
-  }
+
   render() {
     const { name } = this.state;
     return (
       <form className={s.Form} onSubmit={this.handleSubmit}>
-        <button type="submit" className={s.Form__Button}>
+        <button
+          type="submit"
+          className={s.Form__Button}
+          disabled={this.state.name === ""}
+        >
           <FaSearch size="2em" fill="#ccc" className={s.Button__icon} />
         </button>
 
