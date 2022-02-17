@@ -15,6 +15,7 @@ export default class imageGallery extends Component {
     showModal: false,
     modalImage: "",
     status: "idle",
+    error: "",
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,10 +30,10 @@ export default class imageGallery extends Component {
           this.setState((prevState) => ({
             pictures: pictures.hits,
             page: prevState.page + 1,
+            status: "resolved",
           }));
         })
-        .catch((error) => this.setState({ status: "rejected" }))
-        .finally(this.setState({ status: "resolved" }));
+        .catch((error) => this.setState({ status: "rejected", error }));
     }
   }
   loadMore = () => {
@@ -68,8 +69,8 @@ export default class imageGallery extends Component {
       );
     }
     if (status === "rejected") {
-      toast.error("Could not find images with that name");
-      return <p>please enter name picture</p>;
+      toast.error(`${this.state.error}`);
+      return;
     }
     if (status === "resolved") {
       return (
