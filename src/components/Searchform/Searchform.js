@@ -19,6 +19,7 @@ export default class Searchform extends Component {
     return (
       <form className={s.Form} onSubmit={this.handleSubmit}>
         <button
+          aria-label="Search button"
           type="submit"
           className={s.Form__Button}
           disabled={this.state.name === ""}
