@@ -25,15 +25,12 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate");
     if (prevState.name !== this.state.name) {
-      console.log(this.state.name);
       this.setState({ status: "pending" });
       let value = getPictures(this.state.name);
       value
         .then((res) => {
           const pictures = res.data;
-          console.log(pictures);
           if (res.data.total === 0) {
             this.setState({ loadMore: false });
             toast.error("Could not find images with that name");
@@ -69,7 +66,9 @@ export default class App extends Component {
   toglleModal = (e) => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
     if (!this.state.showModal) {
-      this.filtredLIst(e.target.parentNode.id);
+      if (e) {
+        this.filtredLIst(e.target.parentNode.id);
+      }
     }
   };
   filtredLIst = (id) => {
@@ -103,10 +102,7 @@ export default class App extends Component {
               />
             )}
             {status === "resolved" && (
-              <ImageGallery
-                pictures={pictures}
-                toglleModal={this.toglleModal}
-              />
+              <ImageGallery pictures={pictures} open={this.toglleModal} />
             )}
             {loadMore && <Button loag={this.loadMore} />}
             {showModal && <Modal src={modalImage} onClose={this.toglleModal} />}
