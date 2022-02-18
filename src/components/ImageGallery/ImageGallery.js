@@ -16,22 +16,28 @@ export default class imageGallery extends Component {
     modalImage: "",
     status: "idle",
     error: "",
+    loadMore: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.name !== this.props.name) {
-      this.setState({ status: "pending", page: 1 });
+      this.setState({ status: "pending", page: 1, loadMore: false });
       let value = getPictures(this.props.name);
       value
         .then((res) => {
-          if (res.data.total === 0)
-            toast.error("Could not find images with that name");
           const pictures = res.data;
+          if (res.data.total === 0) {
+            toast.error("Could not find images with that name");
+          }
           this.setState((prevState) => ({
             pictures: pictures.hits,
             page: prevState.page + 1,
             status: "resolved",
+            loadMore: true,
           }));
+          if (res.data.hits.length < 12) {
+            this.setState({ loadMore: false });
+          }
         })
         .catch((error) => this.setState({ status: "rejected", error }));
     }
@@ -44,7 +50,11 @@ export default class imageGallery extends Component {
       this.setState((prevState) => ({
         pictures: [...prevState.pictures, ...pictures.hits],
         page: prevState.page + 1,
+        loadMore: true,
       }));
+      if (res.data.hits.length < 12) {
+        this.setState({ loadMore: false });
+      }
     });
   };
   toglleModal = (e) => {
@@ -59,7 +69,7 @@ export default class imageGallery extends Component {
     this.setState({ modalImage: value.largeImageURL });
   };
   render() {
-    const { pictures, status, modalImage, showModal } = this.state;
+    const { pictures, status, modalImage, showModal, loadMore } = this.state;
     if (status === "idle") {
       return <p>please enter name picture</p>;
     }
@@ -92,7 +102,7 @@ export default class imageGallery extends Component {
               );
             })}
           </ul>
-          {pictures.length > 0 && <Button loag={this.loadMore} />}
+          {loadMore && <Button loag={this.loadMore} />}
           {showModal && <Modal src={modalImage} onClose={this.toglleModal} />}
         </>
       );
