@@ -1,116 +1,22 @@
-// import PropTypes from "prop-types";
 import s from "./ImageGallery.module.css";
 import GalleryItem from "../ImageGalleryItem";
-import React, { Component } from "react";
-import getPictures from "../PixabayAPI/PixabayApi";
-import { toast } from "react-toastify";
-import Button from "../Button";
-import Modal from "../Modal";
-import { Rings } from "react-loader-spinner";
-export default class imageGallery extends Component {
-  state = {
-    pictures: [],
-    name: this.props.name,
-    page: 1,
-    showModal: false,
-    modalImage: "",
-    status: "idle",
-    error: "",
-    loadMore: false,
-  };
+import PropTypes from "prop-types";
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.name !== this.props.name) {
-      this.setState({ status: "pending", page: 1, loadMore: false });
-      let value = getPictures(this.props.name);
-      value
-        .then((res) => {
-          const pictures = res.data;
-          if (res.data.total === 0) {
-            toast.error("Could not find images with that name");
-          }
-          this.setState((prevState) => ({
-            pictures: pictures.hits,
-            page: prevState.page + 1,
-            status: "resolved",
-            loadMore: true,
-          }));
-          if (res.data.hits.length < 12) {
-            this.setState({ loadMore: false });
-          }
-        })
-        .catch((error) => this.setState({ status: "rejected", error }));
-    }
-  }
-  loadMore = () => {
-    const { page } = this.state;
-    let value = getPictures(this.props.name, page);
-    value.then((res) => {
-      const pictures = res.data;
-      this.setState((prevState) => ({
-        pictures: [...prevState.pictures, ...pictures.hits],
-        page: prevState.page + 1,
-        loadMore: true,
-      }));
-      if (res.data.hits.length < 12) {
-        this.setState({ loadMore: false });
-      }
-    });
-  };
-  toglleModal = (e) => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-    if (!this.state.showModal) {
-      this.filtredLIst(e.target.parentNode.id);
-    }
-  };
-  filtredLIst = (id) => {
-    const { pictures } = this.state;
-    let value = pictures.find((item) => item.id === Number(id));
-    this.setState({ modalImage: value.largeImageURL });
-  };
-  render() {
-    const { pictures, status, modalImage, showModal, loadMore } = this.state;
-    if (status === "idle") {
-      return <p>please enter name picture</p>;
-    }
-    if (status === "pending") {
-      return (
-        <Rings height="100" width="100" color="grey" ariaLabel="loading" />
-      );
-    }
-    if (status === "rejected") {
-      toast.error(`${this.state.error}`);
-      return;
-    }
-    if (status === "resolved") {
-      return (
-        <>
-          <ul className={s.gallery__list}>
-            {pictures.map(({ webformatURL, tags, id }) => {
-              return (
-                <li
-                  key={id}
-                  onClick={this.toglleModal}
-                  className={s.gallery__item}
-                >
-                  <GalleryItem
-                    userImageURL={webformatURL}
-                    tags={tags}
-                    id={id}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-          {loadMore && <Button loag={this.loadMore} />}
-          {showModal && <Modal src={modalImage} onClose={this.toglleModal} />}
-        </>
-      );
-    }
-  }
+export default function imageGallery({ pictures, toglleModal }) {
+  return (
+    <>
+      <ul className={s.gallery__list}>
+        {pictures.map(({ webformatURL, tags, id }) => {
+          return (
+            <li key={id} className={s.gallery__item} onClick={toglleModal}>
+              <GalleryItem userImageURL={webformatURL} tags={tags} id={id} />
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
 }
-
-// idle
-// pending
-// rejected
-// resolved
+imageGallery.propTypes = {
+  id: PropTypes.number,
+};
